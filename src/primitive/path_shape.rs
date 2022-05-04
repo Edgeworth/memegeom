@@ -23,7 +23,7 @@ pub struct Path {
 
 impl std::fmt::Debug for Path {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{:?} {:?}", self.pts, self.r))
+        write!(f, "{:?} {:?}", self.pts, self.r)
     }
 }
 
