@@ -24,6 +24,7 @@ use crate::primitive::{tri, ShapeOps};
 // Represents a simple non-convex polygon.
 // Stored in CCW order.
 // TODO: make polygons use quadtree?
+#[must_use]
 #[derive(Debug, Clone)]
 pub struct Poly {
     pts: Vec<Pt>,
@@ -33,7 +34,6 @@ pub struct Poly {
 }
 
 impl Poly {
-    #[must_use]
     pub fn new(pts: &[Pt]) -> Self {
         let mut pts = remove_collinear(pts);
         ensure_ccw(&mut pts);
@@ -47,17 +47,14 @@ impl Poly {
         Self { pts, tri, tri_idx, is_convex }
     }
 
-    #[must_use]
     pub fn pts(&self) -> &[Pt] {
         &self.pts
     }
 
-    #[must_use]
     pub fn edges(&self) -> EdgeIterator<'_> {
         edges(&self.pts)
     }
 
-    #[must_use]
     pub fn tri(&self) -> &[Tri] {
         &self.tri
     }
@@ -136,13 +133,13 @@ impl Index<usize> for Poly {
     }
 }
 
+#[must_use]
 pub struct EdgeIterator<'a> {
     pts: &'a [Pt],
     idx: usize,
 }
 
 impl<'a> EdgeIterator<'a> {
-    #[must_use]
     pub fn new(pts: &'a [Pt]) -> Self {
         Self { pts, idx: 0 }
     }
@@ -162,7 +159,6 @@ impl<'a> Iterator for EdgeIterator<'a> {
     }
 }
 
-#[must_use]
 pub fn edges(pts: &[Pt]) -> EdgeIterator<'_> {
     EdgeIterator::new(pts)
 }

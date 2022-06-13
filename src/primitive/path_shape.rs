@@ -14,6 +14,7 @@ use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
 use crate::primitive::{cap, ShapeOps};
 
+#[must_use]
 #[derive(Clone)]
 pub struct Path {
     pts: Vec<Pt>,
@@ -28,7 +29,6 @@ impl std::fmt::Debug for Path {
 }
 
 impl Path {
-    #[must_use]
     pub fn new(pts: &[Pt], r: f64) -> Self {
         let pts = remove_collinear(pts);
         let bounds = pt_cloud_bounds(&pts).inset(-r / 2.0, -r / 2.0);
@@ -45,7 +45,6 @@ impl Path {
         self.len() == 0
     }
 
-    #[must_use]
     pub fn pts(&self) -> &[Pt] {
         &self.pts
     }

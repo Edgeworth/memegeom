@@ -9,35 +9,31 @@ use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
 use crate::primitive::{line, ShapeOps};
 
+#[must_use]
 #[derive(Debug, Display, Copy, Clone)]
-#[display(fmt = "Seg[{}, {}]", st, en)]
+#[display(fmt = "Seg[{st}, {en}]")]
 pub struct Segment {
     st: Pt,
     en: Pt,
 }
 
 impl Segment {
-    #[must_use]
     pub const fn new(st: Pt, en: Pt) -> Self {
         Self { st, en }
     }
 
-    #[must_use]
     pub const fn st(&self) -> Pt {
         self.st
     }
 
-    #[must_use]
     pub const fn en(&self) -> Pt {
         self.en
     }
 
-    #[must_use]
     pub fn dir(&self) -> Pt {
         self.en - self.st
     }
 
-    #[must_use]
     pub const fn line(&self) -> Line {
         line(self.st, self.en)
     }

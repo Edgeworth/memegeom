@@ -12,6 +12,7 @@ use crate::primitive::triangle::Tri;
 use crate::primitive::{poly, ShapeOps};
 use crate::tf::Tf;
 
+#[must_use]
 #[derive(Debug, Clone)]
 pub enum Shape {
     Capsule(Capsule),
@@ -27,7 +28,6 @@ pub enum Shape {
 }
 
 impl Shape {
-    #[must_use]
     pub fn filled(self) -> Shape {
         match self {
             Shape::Path(s) => {

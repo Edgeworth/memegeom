@@ -22,12 +22,14 @@ const TEST_THRESHOLD: usize = 4;
 const MAX_DEPTH: usize = 7;
 const NO_NODE: NodeIdx = 0;
 
+#[must_use]
 #[derive(Debug, Copy, Clone)]
 struct IntersectData {
     shape_idx: ShapeIdx,
     tests: usize, // How many times we had to test against shapes directly.
 }
 
+#[must_use]
 #[derive(Debug, Clone)]
 struct Node {
     intersect: Vec<IntersectData>, // Which shapes intersect this node.
@@ -51,6 +53,7 @@ impl Default for Node {
     }
 }
 
+#[must_use]
 #[derive(Debug, Default, Clone)]
 pub struct QuadTree {
     shapes: Vec<ShapeInfo>,
@@ -63,7 +66,6 @@ pub struct QuadTree {
 }
 
 impl QuadTree {
-    #[must_use]
     pub fn new(shapes: Vec<ShapeInfo>) -> Self {
         let bounds = rt_cloud_bounds(shapes.iter().map(|s| s.shape().bounds()));
         let nodes = vec![
@@ -78,12 +80,10 @@ impl QuadTree {
         Self { shapes, nodes, bounds, ..Default::default() }
     }
 
-    #[must_use]
     pub fn with_bounds(r: &Rt) -> Self {
         Self { nodes: vec![Node::default(), Node::default()], bounds: *r, ..Default::default() }
     }
 
-    #[must_use]
     pub fn empty() -> Self {
         Self {
             nodes: vec![Node::default(), Node::default()],
@@ -100,7 +100,6 @@ impl QuadTree {
         rts
     }
 
-    #[must_use]
     pub fn shapes(&self) -> &[ShapeInfo] {
         &self.shapes
     }
@@ -155,7 +154,6 @@ impl QuadTree {
         self.free_shapes.push(s);
     }
 
-    #[must_use]
     pub fn bounds(&self) -> Rt {
         self.bounds
     }
@@ -404,6 +402,7 @@ impl QuadTree {
 #[cfg(test)]
 mod tests {
     use approx::assert_relative_eq;
+    use pretty_assertions::assert_eq;
     use rand::prelude::SmallRng;
     use rand::{Rng, SeedableRng};
 

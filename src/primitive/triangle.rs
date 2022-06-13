@@ -13,6 +13,7 @@ use crate::primitive::shape::Shape;
 use crate::primitive::{seg, ShapeOps};
 
 // Is in CCW order.
+#[must_use]
 #[derive(Debug, Display, Copy, Clone)]
 #[display(fmt = "Tri[{}, {}, {}]", "self.pts[0]", "self.pts[1]", "self.pts[2]")]
 pub struct Tri {
@@ -20,18 +21,15 @@ pub struct Tri {
 }
 
 impl Tri {
-    #[must_use]
     pub fn new(mut pts: [Pt; 3]) -> Self {
         ensure_ccw(&mut pts);
         Self { pts }
     }
 
-    #[must_use]
     pub fn pts(&self) -> &[Pt; 3] {
         &self.pts
     }
 
-    #[must_use]
     pub fn segs(&self) -> [Segment; 3] {
         [
             seg(self.pts[0], self.pts[1]),
