@@ -279,6 +279,7 @@ pub fn seg_intersects_seg(a: &Segment, b: &Segment) -> bool {
 #[cfg(test)]
 mod tests {
     use itertools::Itertools;
+    use pretty_assertions::assert_eq;
 
     use super::*;
     use crate::primitive::{pt, rt, seg, tri};

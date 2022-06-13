@@ -8,18 +8,17 @@ use crate::primitive::ShapeOps;
 
 // Represents a collection of shapes.
 // Backed by a quadtree-like spatial data structure.
+#[must_use]
 #[derive(Debug, Default, Clone)]
 pub struct Compound {
     qt: RefCell<QuadTree>,
 }
 
 impl Compound {
-    #[must_use]
     pub fn empty() -> Self {
         Self { qt: RefCell::new(QuadTree::empty()) }
     }
 
-    #[must_use]
     pub fn with_bounds(r: &Rt) -> Self {
         Self { qt: RefCell::new(QuadTree::with_bounds(r)) }
     }

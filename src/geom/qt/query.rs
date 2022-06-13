@@ -6,14 +6,18 @@ use crate::geom::qt::quadtree::ShapeIdx;
 use crate::primitive::shape::Shape;
 use crate::primitive::ShapeOps;
 
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Tag(pub usize);
+
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Kinds(pub DenseBitSet);
 
 pub const NO_TAG: Tag = Tag(usize::MAX);
 pub const ALL: Query = Query(TagQuery::All, KindsQuery::All);
 
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum TagQuery {
     All,
@@ -21,12 +25,14 @@ pub enum TagQuery {
     Except(Tag),
 }
 
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum KindsQuery {
     All,
     HasCommon(Kinds), // Query all shapes who have a common kind with the query value.
 }
 
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Query(pub TagQuery, pub KindsQuery);
 
@@ -49,6 +55,7 @@ pub fn matches_query(s: &ShapeInfo, q: Query) -> bool {
     matches_tag_query(s, q.0) && matches_kinds_query(s, q.1)
 }
 
+#[must_use]
 #[derive(Debug, Clone)]
 pub struct ShapeInfo {
     shape: Shape,

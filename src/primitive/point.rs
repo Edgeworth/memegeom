@@ -10,21 +10,20 @@ use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
 use crate::primitive::{pt, pti, rt, ShapeOps};
 
+#[must_use]
 #[derive(Debug, Default, PartialEq, Copy, Clone, Display, Serialize, Deserialize)]
-#[display(fmt = "({}, {})", x, y)]
+#[display(fmt = "({x}, {y})")]
 pub struct Pt {
     pub x: f64,
     pub y: f64,
 }
 
 impl Pt {
-    #[must_use]
     pub const fn new(x: f64, y: f64) -> Self {
         Self { x, y }
     }
 
-    #[must_use]
-    pub fn zero() -> Self {
+    pub const fn zero() -> Self {
         Self::new(0.0, 0.0)
     }
 
@@ -38,7 +37,6 @@ impl Pt {
         [self.x, self.y]
     }
 
-    #[must_use]
     pub fn offset(&self, dx: f64, dy: f64) -> Pt {
         pt(self.x + dx, self.y + dy)
     }
@@ -49,7 +47,6 @@ impl Pt {
     }
 
     // Gets the normal facing outwards (to the right).
-    #[must_use]
     pub fn perp(&self) -> Pt {
         pt(-self.y, self.x).norm()
     }
@@ -74,14 +71,12 @@ impl Pt {
         self.x * p.x + self.y * p.y
     }
 
-    #[must_use]
     pub fn norm(&self) -> Pt {
         let mag = self.mag();
         pt(self.x / mag, self.y / mag)
     }
 
     // Clamps the point to be in the range defined by |r|.
-    #[must_use]
     pub fn clamp(&self, r: &Rt) -> Pt {
         pt(self.x.clamp(r.l(), r.r()), self.y.clamp(r.b(), r.t()))
     }
@@ -181,20 +176,19 @@ impl_op_ex!(-= |a: &mut Pt, b: &Pt| { a.x -= b.x; a.y -= b.y; });
 impl_op_ex_commutative!(*|a: &Pt, b: &f64| -> Pt { pt(a.x * b, a.y * b) });
 impl_op_ex_commutative!(/|a: &Pt, b: &f64| -> Pt { pt(a.x / b, a.y / b) });
 
+#[must_use]
 #[derive(Debug, Default, PartialEq, Eq, Hash, Copy, Clone, Display, Serialize, Deserialize)]
-#[display(fmt = "({}, {})", x, y)]
+#[display(fmt = "({x}, {y})")]
 pub struct PtI {
     pub x: i64,
     pub y: i64,
 }
 
 impl PtI {
-    #[must_use]
     pub const fn new(x: i64, y: i64) -> Self {
         Self { x, y }
     }
 
-    #[must_use]
     pub const fn zero() -> Self {
         Self::new(0, 0)
     }
