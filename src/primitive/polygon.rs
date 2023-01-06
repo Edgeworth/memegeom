@@ -38,7 +38,7 @@ impl Poly {
         let mut pts = remove_collinear(pts);
         ensure_ccw(&mut pts);
         let verts: Vec<f64> = pts.iter().flat_map(|v| [v.x, v.y]).collect();
-        let tri_idx: Vec<_> = earcut(&verts, &vec![], 2).iter().map(|&v| v as u32).collect();
+        let tri_idx: Vec<_> = earcut(&verts, &[], 2).unwrap().iter().map(|&v| v as u32).collect();
         let tri = tri_idx
             .array_chunks::<3>()
             .map(|v| tri(pts[v[0] as usize], pts[v[1] as usize], pts[v[2] as usize]))
