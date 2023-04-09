@@ -1,6 +1,6 @@
 use std::f64::consts::PI;
-use std::ops::Mul;
 
+use auto_ops::impl_op_ex;
 use nalgebra::{vector, Matrix3};
 
 use crate::geom::math::eq;
@@ -139,34 +139,5 @@ impl Tf {
     }
 }
 
-impl Mul<Tf> for Tf {
-    type Output = Tf;
-
-    fn mul(self, rhs: Tf) -> Self::Output {
-        Tf { m: self.m * rhs.m }
-    }
-}
-
-impl Mul<Tf> for &Tf {
-    type Output = Tf;
-
-    fn mul(self, rhs: Tf) -> Self::Output {
-        Tf { m: self.m * rhs.m }
-    }
-}
-
-impl Mul<&Tf> for Tf {
-    type Output = Tf;
-
-    fn mul(self, rhs: &Tf) -> Self::Output {
-        Tf { m: self.m * rhs.m }
-    }
-}
-
-impl Mul<&Tf> for &Tf {
-    type Output = Tf;
-
-    fn mul(self, rhs: &Tf) -> Self::Output {
-        Tf { m: self.m * rhs.m }
-    }
-}
+impl_op_ex!(*|a: &Tf, b: &Tf| -> Tf { Tf { m: a.m * b.m } });
+impl_op_ex!(*= |a: &mut Tf, b: &Tf| { a.m *= b.m });
