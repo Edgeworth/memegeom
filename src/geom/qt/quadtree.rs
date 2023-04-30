@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use std::mem::swap;
 
+use ahash::HashMap;
 use ordered_float::OrderedFloat;
 use smallvec::{smallvec, SmallVec};
 

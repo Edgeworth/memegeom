@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use rust_dense_bitset::DenseBitSet;
 
 use crate::geom::qt::quadtree::ShapeIdx;
@@ -100,7 +98,7 @@ pub fn decompose_shape(s: ShapeInfo) -> Vec<ShapeInfo> {
 
 pub fn cached_intersects<S: ::std::hash::BuildHasher>(
     shapes: &[ShapeInfo],
-    cache: &mut HashMap<ShapeIdx, bool, S>,
+    cache: &mut std::collections::HashMap<ShapeIdx, bool, S>,
     idx: ShapeIdx,
     s: &Shape,
     q: Query,
@@ -118,7 +116,7 @@ pub fn cached_intersects<S: ::std::hash::BuildHasher>(
 
 pub fn cached_contains<S: ::std::hash::BuildHasher>(
     shapes: &[ShapeInfo],
-    cache: &mut HashMap<ShapeIdx, bool, S>,
+    cache: &mut std::collections::HashMap<ShapeIdx, bool, S>,
     idx: ShapeIdx,
     s: &Shape,
     q: Query,
@@ -136,7 +134,7 @@ pub fn cached_contains<S: ::std::hash::BuildHasher>(
 
 pub fn cached_dist<S: ::std::hash::BuildHasher>(
     shapes: &[ShapeInfo],
-    cache: &mut HashMap<ShapeIdx, f64, S>,
+    cache: &mut std::collections::HashMap<ShapeIdx, f64, S>,
     idx: ShapeIdx,
     s: &Shape,
     q: Query,
