@@ -206,7 +206,7 @@ mod tests {
 
     use super::*;
     use crate::geom::math::EP;
-    use crate::primitive::{cap, circ, pt, rt};
+    use crate::primitive::{cap, circ, rt};
 
     #[test]
     fn test_circ_circ() {

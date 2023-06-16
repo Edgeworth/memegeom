@@ -356,7 +356,7 @@ impl QuadTree {
             return;
         }
         let push_down: Vec<_> =
-            self.nodes[idx].intersect.drain_filter(|v| v.tests >= TEST_THRESHOLD).collect();
+            self.nodes[idx].intersect.extract_if(|v| v.tests >= TEST_THRESHOLD).collect();
         if !push_down.is_empty() {
             self.ensure_children(idx);
 
