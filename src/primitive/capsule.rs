@@ -17,7 +17,7 @@ use crate::primitive::{circ, seg, ShapeOps};
 
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]
-#[display(fmt = "Cap[{st}, {en}; {r}]")]
+#[display("Cap[{st}, {en}; {r}]")]
 pub struct Capsule {
     st: Pt,
     en: Pt,

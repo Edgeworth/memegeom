@@ -13,14 +13,14 @@ version = "0.1.0"
 ahash = "0.8.11"
 approx = "0.5.1"
 auto_ops = "0.3.0"
-derive_more = "0.99.17"
+derive_more = {version = "1.0.0", features = ["display"]}
 earcutr = "0.4.3"
-itertools = "0.12.1"
-nalgebra = "0.32.4"
-ordered-float = "4.2.0"
+itertools = "0.13.0"
+nalgebra = "0.33.0"
+ordered-float = "4.2.2"
 rand = {version = "0.8.5", features = ["small_rng"]}
 rust-dense-bitset = "0.1.1"
-serde = {version = "1.0.197", features = ["derive"]}
+serde = {version = "1.0.204", features = ["derive"]}
 smallvec = "1.13.2"
 
 [dev-dependencies]

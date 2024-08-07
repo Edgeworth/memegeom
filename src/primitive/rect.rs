@@ -20,7 +20,7 @@ use crate::primitive::{pt, pti, rt, seg, ShapeOps};
 
 #[must_use]
 #[derive(Debug, Copy, Clone, Display)]
-#[display(fmt = "({l}, {b}, {r}, {t})")]
+#[display("({l}, {b}, {r}, {t})")]
 pub struct Rt {
     l: f64,
     b: f64,
@@ -264,7 +264,7 @@ impl_op_ex_commutative!(/|a: &Rt, b: &i64| -> Rt {
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Eq, Copy, Clone, Display)]
-#[display(fmt = "({x}, {y}, {w}, {h})")]
+#[display("({x}, {y}, {w}, {h})")]
 pub struct RtI {
     x: i64,
     y: i64,
