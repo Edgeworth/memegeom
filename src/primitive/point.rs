@@ -12,7 +12,7 @@ use crate::primitive::{pt, pti, rt, ShapeOps};
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Copy, Clone, Display, Serialize, Deserialize)]
-#[display(fmt = "({x}, {y})")]
+#[display("({x}, {y})")]
 pub struct Pt {
     pub x: f64,
     pub y: f64,
@@ -178,7 +178,7 @@ impl_op_ex_commutative!(/|a: &Pt, b: &f64| -> Pt { pt(a.x / b, a.y / b) });
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Eq, Hash, Copy, Clone, Display, Serialize, Deserialize)]
-#[display(fmt = "({x}, {y})")]
+#[display("({x}, {y})")]
 pub struct PtI {
     pub x: i64,
     pub y: i64,

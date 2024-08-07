@@ -15,7 +15,7 @@ use crate::primitive::{seg, ShapeOps};
 // Is in CCW order.
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]
-#[display(fmt = "Tri[{}, {}, {}]", "self.pts[0]", "self.pts[1]", "self.pts[2]")]
+#[display("Tri[{}, {}, {}]", "self.pts[0]", "self.pts[1]", "self.pts[2]")]
 pub struct Tri {
     pts: [Pt; 3],
 }

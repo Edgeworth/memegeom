@@ -11,7 +11,7 @@ use crate::primitive::{line, ShapeOps};
 
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]
-#[display(fmt = "Seg[{st}, {en}]")]
+#[display("Seg[{st}, {en}]")]
 pub struct Segment {
     st: Pt,
     en: Pt,

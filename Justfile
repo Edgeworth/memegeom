@@ -37,4 +37,4 @@ update:
   cargo update
   cargo build --workspace --all-features --all-targets
   pre-commit autoupdate
-  SETUPTOOLS_USE_DISTUTILS=stdlib pre-commit run --all-files
+  pre-commit run --all-files
