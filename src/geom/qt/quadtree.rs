@@ -2,17 +2,17 @@ use std::mem::swap;
 
 use ahash::HashMap;
 use ordered_float::OrderedFloat;
-use smallvec::{smallvec, SmallVec};
+use smallvec::{SmallVec, smallvec};
 
 use crate::geom::bounds::rt_cloud_bounds;
 use crate::geom::distance::rt_rt_dist;
 use crate::geom::qt::query::{
-    cached_contains, cached_dist, cached_intersects, decompose_shape, matches_query, Query,
-    ShapeInfo,
+    Query, ShapeInfo, cached_contains, cached_dist, cached_intersects, decompose_shape,
+    matches_query,
 };
+use crate::primitive::ShapeOps;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::ShapeOps;
 
 type NodeIdx = usize;
 pub type ShapeIdx = usize;
@@ -68,15 +68,12 @@ pub struct QuadTree {
 impl QuadTree {
     pub fn new(shapes: Vec<ShapeInfo>) -> Self {
         let bounds = rt_cloud_bounds(shapes.iter().map(|s| s.shape().bounds()));
-        let nodes = vec![
-            Node::default(),
-            Node {
-                intersect: (0..shapes.len())
-                    .map(|shape_idx| IntersectData { shape_idx, tests: 0 })
-                    .collect(),
-                ..Default::default()
-            },
-        ];
+        let nodes = vec![Node::default(), Node {
+            intersect: (0..shapes.len())
+                .map(|shape_idx| IntersectData { shape_idx, tests: 0 })
+                .collect(),
+            ..Default::default()
+        }];
         Self { shapes, nodes, bounds, ..Default::default() }
     }
 
@@ -356,7 +353,7 @@ impl QuadTree {
             return;
         }
         let push_down: Vec<_> =
-            self.nodes[idx].intersect.extract_if(|v| v.tests >= TEST_THRESHOLD).collect();
+            self.nodes[idx].intersect.extract_if(.., |v| v.tests >= TEST_THRESHOLD).collect();
         if !push_down.is_empty() {
             self.ensure_children(idx);
 

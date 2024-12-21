@@ -12,7 +12,7 @@ use crate::primitive::capsule::Capsule;
 use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::{cap, ShapeOps};
+use crate::primitive::{ShapeOps, cap};
 
 #[must_use]
 #[derive(Clone)]

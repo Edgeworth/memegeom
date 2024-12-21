@@ -9,7 +9,7 @@ use crate::primitive::polygon::Poly;
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::triangle::Tri;
-use crate::primitive::{poly, ShapeOps};
+use crate::primitive::{ShapeOps, poly};
 use crate::tf::Tf;
 
 #[must_use]
@@ -17,7 +17,7 @@ use crate::tf::Tf;
 pub enum Shape {
     Capsule(Capsule),
     Circle(Circle),
-    Compound(Compound),
+    Compound(Box<Compound>),
     Line(Line),
     Path(Path),
     Point(Pt),

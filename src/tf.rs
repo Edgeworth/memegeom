@@ -1,7 +1,7 @@
 use std::f64::consts::PI;
 
 use auto_ops::impl_op_ex;
-use nalgebra::{vector, Matrix3};
+use nalgebra::{Matrix3, vector};
 
 use crate::geom::math::eq;
 use crate::primitive::capsule::Capsule;
@@ -14,7 +14,7 @@ use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::shape::Shape;
 use crate::primitive::triangle::Tri;
-use crate::primitive::{cap, circ, line, path, poly, pt, seg, tri, ShapeOps};
+use crate::primitive::{ShapeOps, cap, circ, line, path, poly, pt, seg, tri};
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Copy, Clone)]

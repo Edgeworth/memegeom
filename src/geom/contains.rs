@@ -8,7 +8,7 @@ use crate::primitive::polygon::Poly;
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::triangle::Tri;
-use crate::primitive::{line, ShapeOps};
+use crate::primitive::{ShapeOps, line};
 
 #[must_use]
 pub fn cap_contains_pt(a: &Capsule, b: &Pt) -> bool {

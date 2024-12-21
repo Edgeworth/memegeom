@@ -1,8 +1,8 @@
 use rust_dense_bitset::DenseBitSet;
 
 use crate::geom::qt::quadtree::ShapeIdx;
-use crate::primitive::shape::Shape;
 use crate::primitive::ShapeOps;
+use crate::primitive::shape::Shape;
 
 #[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -49,6 +49,7 @@ fn matches_kinds_query(s: &ShapeInfo, q: KindsQuery) -> bool {
     }
 }
 
+#[must_use]
 pub fn matches_query(s: &ShapeInfo, q: Query) -> bool {
     matches_tag_query(s, q.0) && matches_kinds_query(s, q.1)
 }

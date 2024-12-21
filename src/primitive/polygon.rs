@@ -19,7 +19,7 @@ use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
 use crate::primitive::triangle::Tri;
-use crate::primitive::{tri, ShapeOps};
+use crate::primitive::{ShapeOps, tri};
 
 // Represents a simple non-convex polygon.
 // Stored in CCW order.

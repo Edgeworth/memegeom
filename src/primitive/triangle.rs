@@ -10,12 +10,12 @@ use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::shape::Shape;
-use crate::primitive::{seg, ShapeOps};
+use crate::primitive::{ShapeOps, seg};
 
 // Is in CCW order.
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]
-#[display("Tri[{}, {}, {}]", "self.pts[0]", "self.pts[1]", "self.pts[2]")]
+#[display("Tri[{}, {}, {}]", self.pts[0], self.pts[1], self.pts[2])]
 pub struct Tri {
     pts: [Pt; 3],
 }

@@ -7,7 +7,7 @@ use crate::primitive::line_shape::Line;
 use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::{line, ShapeOps};
+use crate::primitive::{ShapeOps, line};
 
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]
