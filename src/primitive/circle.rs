@@ -9,7 +9,7 @@ use crate::geom::intersects::{
 use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::{rt, ShapeOps};
+use crate::primitive::{ShapeOps, rt};
 
 #[must_use]
 #[derive(Debug, Copy, Clone)]

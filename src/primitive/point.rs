@@ -1,14 +1,14 @@
 use approx::{AbsDiffEq, RelativeEq};
 use auto_ops::{impl_op_ex, impl_op_ex_commutative};
 use derive_more::Display;
-use nalgebra::{vector, Vector2};
+use nalgebra::{Vector2, vector};
 use serde::{Deserialize, Serialize};
 
 use crate::geom::contains::{cap_contains_pt, circ_contains_pt, poly_contains_pt};
 use crate::geom::distance::{line_pt_dist, poly_pt_dist, pt_pt_dist, pt_rt_dist, pt_seg_dist};
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::{pt, pti, rt, ShapeOps};
+use crate::primitive::{ShapeOps, pt, pti, rt};
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Copy, Clone, Display, Serialize, Deserialize)]

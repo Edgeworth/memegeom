@@ -1,10 +1,10 @@
 use std::cell::{Ref, RefCell};
 
 use crate::geom::qt::quadtree::{QuadTree, ShapeIdx};
-use crate::geom::qt::query::{Query, ShapeInfo, ALL};
+use crate::geom::qt::query::{ALL, Query, ShapeInfo};
+use crate::primitive::ShapeOps;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::ShapeOps;
 
 // Represents a collection of shapes.
 // Backed by a quadtree-like spatial data structure.
@@ -56,7 +56,7 @@ impl ShapeOps for Compound {
     }
 
     fn shape(self) -> Shape {
-        Shape::Compound(self)
+        Shape::Compound(Box::new(self))
     }
 
     fn intersects_shape(&self, s: &Shape) -> bool {

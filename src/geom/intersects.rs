@@ -9,7 +9,7 @@ use crate::primitive::polygon::Poly;
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::triangle::Tri;
-use crate::primitive::{cap, ShapeOps};
+use crate::primitive::{ShapeOps, cap};
 
 #[must_use]
 pub fn cap_intersects_cap(a: &Capsule, b: &Capsule) -> bool {

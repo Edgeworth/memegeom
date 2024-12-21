@@ -16,7 +16,7 @@ use crate::geom::math::{eq, ge, gt, le, lt};
 use crate::primitive::point::{Pt, PtI};
 use crate::primitive::segment::Segment;
 use crate::primitive::shape::Shape;
-use crate::primitive::{pt, pti, rt, seg, ShapeOps};
+use crate::primitive::{ShapeOps, pt, pti, rt, seg};
 
 #[must_use]
 #[derive(Debug, Copy, Clone, Display)]

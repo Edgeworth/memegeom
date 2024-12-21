@@ -9,7 +9,7 @@ use crate::primitive::circle::Circle;
 use crate::primitive::line_shape::Line;
 use crate::primitive::path_shape::Path;
 use crate::primitive::point::Pt;
-use crate::primitive::polygon::{edges, Poly};
+use crate::primitive::polygon::{Poly, edges};
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::{pt, seg};
@@ -117,11 +117,7 @@ pub fn polyline_pt_dist(a: &[Pt], b: &Pt) -> f64 {
 
 #[must_use]
 pub fn poly_pt_dist(a: &Poly, b: &Pt) -> f64 {
-    if poly_contains_pt(a, b) {
-        0.0
-    } else {
-        polyline_pt_dist(a.pts(), b)
-    }
+    if poly_contains_pt(a, b) { 0.0 } else { polyline_pt_dist(a.pts(), b) }
 }
 
 #[must_use]
@@ -155,11 +151,7 @@ pub fn pt_seg_dist(a: &Pt, b: &Segment) -> f64 {
     let en_dist = a.dist(b.en());
     let project = b.line().project(*a);
     let dist = st_dist.min(en_dist);
-    if b.contains(project) {
-        dist.min(a.dist(project))
-    } else {
-        dist
-    }
+    if b.contains(project) { dist.min(a.dist(project)) } else { dist }
 }
 
 #[must_use]

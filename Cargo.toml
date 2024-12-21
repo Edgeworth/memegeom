@@ -2,7 +2,7 @@
 authors = ["Eliot Courtney <edgeworth.dev@gmail.com>"]
 categories = ["graphics", "data-structures", "algorithms"]
 description = "computational geometry library"
-edition = "2021"
+edition = "2024"
 keywords = ["compgeom", "geometry"]
 license = "MIT OR Apache-2.0"
 name = "memegeom"
@@ -16,12 +16,12 @@ auto_ops = "0.3.0"
 derive_more = {version = "1.0.0", features = ["display"]}
 earcutr = "0.4.3"
 itertools = "0.13.0"
-nalgebra = "0.33.0"
-ordered-float = "4.2.2"
+nalgebra = "0.33.2"
+ordered-float = "4.5.0"
 rand = {version = "0.8.5", features = ["small_rng"]}
 rust-dense-bitset = "0.1.1"
-serde = {version = "1.0.204", features = ["derive"]}
+serde = {version = "1.0.216", features = ["derive"]}
 smallvec = "1.13.2"
 
 [dev-dependencies]
-pretty_assertions = "1.4.0"
+pretty_assertions = "1.4.1"

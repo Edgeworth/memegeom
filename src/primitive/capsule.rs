@@ -13,7 +13,7 @@ use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::segment::Segment;
 use crate::primitive::shape::Shape;
-use crate::primitive::{circ, seg, ShapeOps};
+use crate::primitive::{ShapeOps, circ, seg};
 
 #[must_use]
 #[derive(Debug, Display, Copy, Clone)]

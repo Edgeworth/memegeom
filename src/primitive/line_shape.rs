@@ -1,9 +1,9 @@
 use crate::geom::distance::line_pt_dist;
 use crate::geom::intersects::{line_intersects_line, line_intersects_seg};
+use crate::primitive::ShapeOps;
 use crate::primitive::point::Pt;
 use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
-use crate::primitive::ShapeOps;
 
 #[must_use]
 #[derive(Debug, Copy, Clone)]
