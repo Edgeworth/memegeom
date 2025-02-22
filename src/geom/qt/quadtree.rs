@@ -68,12 +68,15 @@ pub struct QuadTree {
 impl QuadTree {
     pub fn new(shapes: Vec<ShapeInfo>) -> Self {
         let bounds = rt_cloud_bounds(shapes.iter().map(|s| s.shape().bounds()));
-        let nodes = vec![Node::default(), Node {
-            intersect: (0..shapes.len())
-                .map(|shape_idx| IntersectData { shape_idx, tests: 0 })
-                .collect(),
-            ..Default::default()
-        }];
+        let nodes = vec![
+            Node::default(),
+            Node {
+                intersect: (0..shapes.len())
+                    .map(|shape_idx| IntersectData { shape_idx, tests: 0 })
+                    .collect(),
+                ..Default::default()
+            },
+        ];
         Self { shapes, nodes, bounds, ..Default::default() }
     }
 
@@ -451,12 +454,12 @@ mod tests {
 
         let mut r = SmallRng::seed_from_u64(0);
         for _ in 0..100 {
-            let p0 = pt(r.gen_range(-50.0..150.0), r.gen_range(-150.0..-100.0));
-            let p1 = pt(r.gen_range(-50.0..150.0), r.gen_range(-150.0..-100.0));
+            let p0 = pt(r.random_range(-50.0..150.0), r.random_range(-150.0..-100.0));
+            let p1 = pt(r.random_range(-50.0..150.0), r.random_range(-150.0..-100.0));
             assert_eq!(poly.contains_shape(&p0.shape()), qt.contains(&p0.shape(), ALL));
             let rt = Rt::enclosing(p0, p1);
             assert_eq!(poly.contains_shape(&rt.shape()), qt.contains(&rt.shape(), ALL));
-            let c = circ(p0, r.gen_range(0.01..100.0));
+            let c = circ(p0, r.random_range(0.01..100.0));
             assert_eq!(poly.contains_shape(&c.shape()), qt.contains(&c.shape(), ALL));
         }
     }
