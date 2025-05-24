@@ -10,7 +10,7 @@ repository = "https://github.com/Edgeworth/memegeom"
 version = "0.1.0"
 
 [dependencies]
-ahash = "0.8.11"
+ahash = "0.8.12"
 approx = "0.5.1"
 auto_ops = "0.3.0"
 derive_more = {version = "2.0.1", features = ["display"]}
@@ -18,10 +18,10 @@ earcutr = "0.4.3"
 itertools = "0.14.0"
 nalgebra = "0.33.2"
 ordered-float = "5.0.0"
-rand = {version = "0.9.0", features = ["small_rng"]}
+rand = {version = "0.9.1", features = ["small_rng"]}
 rust-dense-bitset = "0.1.1"
-serde = {version = "1.0.218", features = ["derive"]}
-smallvec = "1.14.0"
+serde = {version = "1.0.219", features = ["derive"]}
+smallvec = "1.15.0"
 
 [dev-dependencies]
 pretty_assertions = "1.4.1"
