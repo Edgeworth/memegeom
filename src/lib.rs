@@ -27,7 +27,6 @@
     clippy::cast_sign_loss,
     clippy::items_after_statements,
     clippy::many_single_char_names,
-    clippy::match_on_vec_items,
     clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::module_name_repetitions,
@@ -37,7 +36,7 @@
     clippy::unreadable_literal
 )]
 #![allow(clippy::match_same_arms)]
-#![feature(array_chunks, array_windows)]
+#![feature(array_windows, iter_array_chunks)]
 
 pub mod geom;
 pub mod primitive;
