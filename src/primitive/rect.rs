@@ -123,7 +123,7 @@ impl Rt {
     }
 
     pub fn center(&self) -> Pt {
-        pt((self.l + self.r) / 2.0, (self.b + self.t) / 2.0)
+        pt(f64::midpoint(self.l, self.r), f64::midpoint(self.b, self.t))
     }
 
     #[must_use]

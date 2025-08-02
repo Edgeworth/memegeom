@@ -40,8 +40,9 @@ impl Poly {
         let verts: Vec<f64> = pts.iter().flat_map(|v| [v.x, v.y]).collect();
         let tri_idx: Vec<_> = earcut(&verts, &[], 2).unwrap().iter().map(|&v| v as u32).collect();
         let tri = tri_idx
+            .iter()
             .array_chunks::<3>()
-            .map(|v| tri(pts[v[0] as usize], pts[v[1] as usize], pts[v[2] as usize]))
+            .map(|v| tri(pts[*v[0] as usize], pts[*v[1] as usize], pts[*v[2] as usize]))
             .collect();
         let is_convex = is_convex_ccw(&pts);
         Self { pts, tri, tri_idx, is_convex }
