@@ -36,7 +36,7 @@
     clippy::unreadable_literal
 )]
 #![allow(clippy::match_same_arms)]
-#![feature(array_windows, iter_array_chunks)]
+#![feature(iter_array_chunks)]
 
 pub mod geom;
 pub mod primitive;
