@@ -1,29 +1,31 @@
 use std::cell::{Ref, RefCell};
 
+use crate::Result;
 use crate::geom::qt::quadtree::{QuadTree, ShapeIdx};
 use crate::geom::qt::query::{ALL, Query, ShapeInfo};
-use crate::primitive::ShapeOps;
-use crate::primitive::rect::Rt;
 use crate::primitive::shape::Shape;
+use crate::primitive::{Rt, ShapeOps};
 
 // Represents a collection of shapes.
 // Backed by a quadtree-like spatial data structure.
 #[must_use]
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Clone)]
 pub struct Compound {
     qt: RefCell<QuadTree>,
 }
 
-impl Compound {
-    pub fn empty() -> Self {
-        Self { qt: RefCell::new(QuadTree::empty()) }
+impl Default for Compound {
+    fn default() -> Self {
+        Self::with_bounds(&Rt::default())
     }
+}
 
+impl Compound {
     pub fn with_bounds(r: &Rt) -> Self {
         Self { qt: RefCell::new(QuadTree::with_bounds(r)) }
     }
 
-    pub fn add_shape(&self, shape: ShapeInfo) -> Vec<ShapeIdx> {
+    pub fn add_shape(&self, shape: ShapeInfo) -> Result<Vec<ShapeIdx>> {
         self.qt.borrow_mut().add_shape(shape)
     }
 
@@ -41,7 +43,7 @@ impl Compound {
         self.qt.borrow_mut().contains(s, q)
     }
 
-    pub fn dist(&self, s: &Shape, q: Query) -> f64 {
+    pub fn dist(&self, s: &Shape, q: Query) -> Option<f64> {
         self.qt.borrow_mut().dist(s, q)
     }
 
@@ -51,12 +53,17 @@ impl Compound {
 }
 
 impl ShapeOps for Compound {
-    fn bounds(&self) -> Rt {
+    fn bounds(&self) -> Option<Rt> {
         self.qt.borrow().bounds()
     }
 
     fn shape(self) -> Shape {
         Shape::Compound(Box::new(self))
+    }
+
+    fn is_empty_set(&self) -> bool {
+        // Compound is empty if all contained shapes are empty (including if there are no shapes)
+        self.qt.borrow().shapes().all(|s| s.shape().is_empty_set())
     }
 
     fn intersects_shape(&self, s: &Shape) -> bool {
@@ -69,7 +76,7 @@ impl ShapeOps for Compound {
         self.qt.borrow_mut().contains(s, ALL)
     }
 
-    fn dist_to_shape(&self, s: &Shape) -> f64 {
+    fn dist_to_shape(&self, s: &Shape) -> Option<f64> {
         self.qt.borrow_mut().dist(s, ALL)
     }
 }

@@ -36,8 +36,16 @@
     clippy::unreadable_literal
 )]
 #![allow(clippy::match_same_arms)]
-#![feature(iter_array_chunks)]
+#![feature(iter_array_chunks, adt_const_params)]
 
 pub mod geom;
 pub mod primitive;
 pub mod tf;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, thiserror::Error)]
+pub enum Error {
+    #[error("shape has no bounds")]
+    NoBounds,
+}
+
+pub type Result<T> = std::result::Result<T, Error>;

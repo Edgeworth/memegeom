@@ -88,9 +88,10 @@ impl ShapeInfo {
 // Split compound shapes up.
 pub fn decompose_shape(s: ShapeInfo) -> Vec<ShapeInfo> {
     let shapes = match s.shape {
-        Shape::Compound(s) => s.quadtree().shapes().iter().map(|v| v.shape.clone()).collect(),
-        Shape::Path(s) => s.caps().map(ShapeOps::shape).collect(),
-        s => vec![s],
+        Shape::Compound(c) => c.quadtree().shapes().map(|v| v.shape.clone()).collect(),
+        Shape::Path(p) => p.caps().map(ShapeOps::shape).collect(),
+        Shape::PathExcl(p) => p.caps().map(ShapeOps::shape).collect(),
+        _ => vec![s.shape.clone()],
     };
     let tag = s.tag;
     let kinds = s.kinds;
@@ -98,55 +99,55 @@ pub fn decompose_shape(s: ShapeInfo) -> Vec<ShapeInfo> {
 }
 
 pub fn cached_intersects<S: ::std::hash::BuildHasher>(
-    shapes: &[ShapeInfo],
     cache: &mut std::collections::HashMap<ShapeIdx, bool, S>,
     idx: ShapeIdx,
+    shape_info: &ShapeInfo,
     s: &Shape,
     q: Query,
 ) -> bool {
-    if !matches_query(&shapes[idx], q) {
-        false
-    } else if let Some(res) = cache.get(&idx) {
-        *res
-    } else {
-        let res = shapes[idx].shape().intersects_shape(s);
-        cache.insert(idx, res);
-        res
+    if !matches_query(shape_info, q) {
+        return false;
     }
+    if let Some(res) = cache.get(&idx) {
+        return *res;
+    }
+    let res = shape_info.shape().intersects_shape(s);
+    cache.insert(idx, res);
+    res
 }
 
 pub fn cached_contains<S: ::std::hash::BuildHasher>(
-    shapes: &[ShapeInfo],
     cache: &mut std::collections::HashMap<ShapeIdx, bool, S>,
     idx: ShapeIdx,
+    shape_info: &ShapeInfo,
     s: &Shape,
     q: Query,
 ) -> bool {
-    if !matches_query(&shapes[idx], q) {
-        false
-    } else if let Some(res) = cache.get(&idx) {
-        *res
-    } else {
-        let res = shapes[idx].shape().contains_shape(s);
-        cache.insert(idx, res);
-        res
+    if !matches_query(shape_info, q) {
+        return false;
     }
+    if let Some(res) = cache.get(&idx) {
+        return *res;
+    }
+    let res = shape_info.shape().contains_shape(s);
+    cache.insert(idx, res);
+    res
 }
 
 pub fn cached_dist<S: ::std::hash::BuildHasher>(
-    shapes: &[ShapeInfo],
-    cache: &mut std::collections::HashMap<ShapeIdx, f64, S>,
+    cache: &mut std::collections::HashMap<ShapeIdx, Option<f64>, S>,
     idx: ShapeIdx,
+    shape_info: &ShapeInfo,
     s: &Shape,
     q: Query,
-) -> f64 {
-    if !matches_query(&shapes[idx], q) {
-        f64::MAX // Let's say distance to the empty set is infinity-ish.
-    } else if let Some(res) = cache.get(&idx) {
-        *res
-    } else {
-        let res = shapes[idx].shape().dist_to_shape(s);
-        cache.insert(idx, res);
-        res
+) -> Option<f64> {
+    if !matches_query(shape_info, q) {
+        return None;
     }
+    if let Some(res) = cache.get(&idx) {
+        return *res;
+    }
+    let res = shape_info.shape().dist_to_shape(s);
+    cache.insert(idx, res);
+    res
 }

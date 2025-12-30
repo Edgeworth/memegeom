@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::geom::contains::{cap_contains_pt, circ_contains_pt, poly_contains_pt};
 use crate::geom::distance::{line_pt_dist, poly_pt_dist, pt_pt_dist, pt_rt_dist, pt_seg_dist};
-use crate::primitive::rect::Rt;
+use crate::primitive::rect::RtPrimitive;
 use crate::primitive::shape::Shape;
-use crate::primitive::{ShapeOps, pt, pti, rt};
+use crate::primitive::{Boundary, Rt, ShapeOps, pt, pti, rt};
 
 #[must_use]
 #[derive(Debug, Default, PartialEq, Copy, Clone, Display, Serialize, Deserialize)]
@@ -18,8 +18,11 @@ pub struct Pt {
     pub y: f64,
 }
 
+impl Eq for Pt {}
+
 impl Pt {
     pub const fn new(x: f64, y: f64) -> Self {
+        assert!(x.is_finite() && y.is_finite(), "point coordinates must be finite");
         Self { x, y }
     }
 
@@ -46,8 +49,9 @@ impl Pt {
         self.x * p.y - self.y * p.x
     }
 
-    // Gets the normal facing outwards (to the right).
-    pub fn perp(&self) -> Pt {
+    // Gets the normalized perpendicular (to the right). Returns None for zero vectors.
+    #[must_use]
+    pub fn perp(&self) -> Option<Pt> {
         pt(-self.y, self.x).norm()
     }
 
@@ -71,13 +75,14 @@ impl Pt {
         self.x * p.x + self.y * p.y
     }
 
-    pub fn norm(&self) -> Pt {
+    #[must_use]
+    pub fn norm(&self) -> Option<Pt> {
         let mag = self.mag();
-        pt(self.x / mag, self.y / mag)
+        if mag == 0.0 { None } else { Some(pt(self.x / mag, self.y / mag)) }
     }
 
     // Clamps the point to be in the range defined by |r|.
-    pub fn clamp(&self, r: &Rt) -> Pt {
+    pub fn clamp<const B: Boundary>(&self, r: &RtPrimitive<B>) -> Pt {
         pt(self.x.clamp(r.l(), r.r()), self.y.clamp(r.b(), r.t()))
     }
 }
@@ -112,56 +117,67 @@ impl From<Pt> for Vector2<f64> {
 }
 
 impl ShapeOps for Pt {
-    fn bounds(&self) -> Rt {
-        rt(self.x, self.y, self.x, self.y)
+    fn bounds(&self) -> Option<Rt> {
+        Some(rt(self.x, self.y, self.x, self.y))
     }
 
     fn shape(self) -> Shape {
         Shape::Point(self)
     }
 
+    fn is_empty_set(&self) -> bool {
+        false // A point is never empty
+    }
+
     fn intersects_shape(&self, s: &Shape) -> bool {
         match s {
             Shape::Capsule(s) => cap_contains_pt(s, self),
+            Shape::CapsuleExcl(s) => cap_contains_pt(s, self),
             Shape::Circle(s) => circ_contains_pt(s, self),
+            Shape::CircleExcl(s) => circ_contains_pt(s, self),
             Shape::Compound(_) => todo!(),
             Shape::Line(_) => todo!(),
-            Shape::Path(_) => todo!(),
+            Shape::Path(_) | Shape::PathExcl(_) => todo!(),
             Shape::Point(_) => todo!(),
-            Shape::Polygon(s) => poly_contains_pt(s, self),
+            Shape::Poly(s) => poly_contains_pt(s, self),
+            Shape::PolyExcl(s) => poly_contains_pt(s, self),
             Shape::Rect(s) => s.contains(*self),
+            Shape::RectExcl(s) => s.contains(*self),
             Shape::Segment(_) => todo!(),
-            Shape::Tri(_) => todo!(),
+            Shape::Tri(_) | Shape::TriExcl(_) => todo!(),
         }
     }
 
     fn contains_shape(&self, s: &Shape) -> bool {
         match s {
-            Shape::Capsule(_) => todo!(),
-            Shape::Circle(_) => todo!(),
+            Shape::Capsule(_) | Shape::CapsuleExcl(_) => todo!(),
+            Shape::Circle(_) | Shape::CircleExcl(_) => todo!(),
             Shape::Compound(_) => todo!(),
             Shape::Line(_) => todo!(),
-            Shape::Path(_) => todo!(),
+            Shape::Path(_) | Shape::PathExcl(_) => todo!(),
             Shape::Point(_) => todo!(),
-            Shape::Polygon(_) => todo!(),
+            Shape::Poly(_) | Shape::PolyExcl(_) => todo!(),
             Shape::Rect(_) => todo!(),
+            Shape::RectExcl(_) => todo!(),
             Shape::Segment(_) => todo!(),
-            Shape::Tri(_) => todo!(),
+            Shape::Tri(_) | Shape::TriExcl(_) => todo!(),
         }
     }
 
-    fn dist_to_shape(&self, s: &Shape) -> f64 {
+    fn dist_to_shape(&self, s: &Shape) -> Option<f64> {
         match s {
-            Shape::Capsule(_) => todo!(),
-            Shape::Circle(_) => todo!(),
+            Shape::Capsule(_) | Shape::CapsuleExcl(_) => todo!(),
+            Shape::Circle(_) | Shape::CircleExcl(_) => todo!(),
             Shape::Compound(_) => todo!(),
-            Shape::Line(s) => line_pt_dist(s, self),
-            Shape::Path(_) => todo!(),
-            Shape::Point(s) => pt_pt_dist(self, s),
-            Shape::Polygon(s) => poly_pt_dist(s, self),
+            Shape::Line(s) => Some(line_pt_dist(s, self)),
+            Shape::Path(_) | Shape::PathExcl(_) => todo!(),
+            Shape::Point(s) => Some(pt_pt_dist(self, s)),
+            Shape::Poly(s) => poly_pt_dist(s, self),
+            Shape::PolyExcl(s) => poly_pt_dist(s, self),
             Shape::Rect(s) => pt_rt_dist(self, s),
-            Shape::Segment(s) => pt_seg_dist(self, s),
-            Shape::Tri(_) => todo!(),
+            Shape::RectExcl(s) => pt_rt_dist(self, s),
+            Shape::Segment(s) => Some(pt_seg_dist(self, s)),
+            Shape::Tri(_) | Shape::TriExcl(_) => todo!(),
         }
     }
 }
@@ -223,3 +239,54 @@ impl_op_ex!(-= |a: &mut PtI, b: &PtI| { a.x -= b.x; a.y -= b.y; });
 
 impl_op_ex_commutative!(*|a: &PtI, b: &i64| -> PtI { pti(a.x * b, a.y * b) });
 impl_op_ex_commutative!(/|a: &PtI, b: &i64| -> PtI { pti(a.x / b, a.y / b) });
+
+#[cfg(test)]
+mod tests {
+    use approx::assert_relative_eq;
+
+    use super::*;
+
+    #[test]
+    fn norm_zero_vector_returns_none() {
+        let zero = pt(0.0, 0.0);
+        assert!(zero.norm().is_none());
+    }
+
+    #[test]
+    fn norm_non_zero_vector_returns_some() {
+        let v = pt(3.0, 4.0);
+        let n = v.norm().unwrap();
+        assert_relative_eq!(n.mag(), 1.0, epsilon = 1e-10);
+        assert_relative_eq!(n.x, 0.6, epsilon = 1e-10);
+        assert_relative_eq!(n.y, 0.8, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn norm_small_vector() {
+        let v = pt(1e-100, 0.0);
+        let n = v.norm().unwrap();
+        assert_relative_eq!(n.mag(), 1.0, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn perp_zero_vector_returns_none() {
+        let zero = pt(0.0, 0.0);
+        assert!(zero.perp().is_none());
+    }
+
+    #[test]
+    fn perp_non_zero_vector_returns_some() {
+        let v = pt(1.0, 0.0);
+        let p = v.perp().unwrap();
+        // Perpendicular to (1, 0) is (0, 1) or (0, -1)
+        assert_relative_eq!(p.mag(), 1.0, epsilon = 1e-10);
+        assert_relative_eq!(v.dot(p), 0.0, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn perp_is_normalized() {
+        let v = pt(3.0, 4.0);
+        let p = v.perp().unwrap();
+        assert_relative_eq!(p.mag(), 1.0, epsilon = 1e-10);
+    }
+}
