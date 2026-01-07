@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::geom::contains::{cap_contains_pt, circ_contains_pt, poly_contains_pt};
 use crate::geom::distance::{line_pt_dist, poly_pt_dist, pt_pt_dist, pt_rt_dist, pt_seg_dist};
+use crate::geom::math::EP;
 use crate::primitive::rect::RtPrimitive;
 use crate::primitive::shape::Shape;
 use crate::primitive::{Boundary, Rt, ShapeOps, pt, pti, rt};
@@ -85,13 +86,18 @@ impl Pt {
     pub fn clamp<const B: Boundary>(&self, r: &RtPrimitive<B>) -> Pt {
         pt(self.x.clamp(r.l(), r.r()), self.y.clamp(r.b(), r.t()))
     }
+
+    #[must_use]
+    pub fn rel_eq(&self, o: &Self) -> bool {
+        RelativeEq::relative_eq(self, o, EP, EP)
+    }
 }
 
 impl AbsDiffEq for Pt {
     type Epsilon = f64;
 
     fn default_epsilon() -> f64 {
-        f64::default_epsilon()
+        EP
     }
 
     fn abs_diff_eq(&self, o: &Self, epsilon: f64) -> bool {
@@ -101,7 +107,7 @@ impl AbsDiffEq for Pt {
 
 impl RelativeEq for Pt {
     fn default_max_relative() -> f64 {
-        f64::default_max_relative()
+        EP
     }
 
     fn relative_eq(&self, o: &Self, epsilon: f64, max_relative: f64) -> bool {

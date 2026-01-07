@@ -13,7 +13,7 @@ use crate::geom::intersects::{
     cap_intersects_rt, circ_intersects_rt, path_intersects_rt, poly_intersects_rt,
     rt_intersects_rt, rt_intersects_seg, rt_intersects_tri,
 };
-use crate::geom::math::{eq, ge, gt, le, lt};
+use crate::geom::math::{EP, eq, ge, gt, le, lt};
 use crate::primitive::point::{Pt, PtI};
 use crate::primitive::shape::Shape;
 use crate::primitive::{Boundary, Rt, RtExcl, Segment, ShapeOps, pt, pti, seg};
@@ -230,6 +230,11 @@ impl<const B: Boundary> RtPrimitive<B> {
             RtPrimitive::new(self.l, self.b, self.l + len * aspect, self.b + len / aspect)
         }
     }
+
+    #[must_use]
+    pub fn rel_eq(&self, o: &Self) -> bool {
+        RelativeEq::relative_eq(self, o, EP, EP)
+    }
 }
 
 // Methods specific to Include boundary
@@ -255,7 +260,7 @@ impl<const B: Boundary> AbsDiffEq for RtPrimitive<B> {
     type Epsilon = f64;
 
     fn default_epsilon() -> f64 {
-        f64::default_epsilon()
+        EP
     }
 
     fn abs_diff_eq(&self, o: &Self, epsilon: f64) -> bool {
@@ -268,7 +273,7 @@ impl<const B: Boundary> AbsDiffEq for RtPrimitive<B> {
 
 impl<const B: Boundary> RelativeEq for RtPrimitive<B> {
     fn default_max_relative() -> f64 {
-        f64::default_max_relative()
+        EP
     }
 
     fn relative_eq(&self, o: &Self, epsilon: f64, max_relative: f64) -> bool {

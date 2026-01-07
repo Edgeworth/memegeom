@@ -8,7 +8,7 @@ use crate::geom::intersects::{
     cap_intersects_circ, circ_intersects_circ, circ_intersects_path, circ_intersects_poly,
     circ_intersects_rt, circ_intersects_tri,
 };
-use crate::geom::math::eq;
+use crate::geom::math::{EP, eq};
 use crate::primitive::point::Pt;
 use crate::primitive::shape::Shape;
 use crate::primitive::{Boundary, Circle, CircleExcl, Rt, ShapeOps, rt};
@@ -32,7 +32,7 @@ impl<const B: Boundary> AbsDiffEq for CirclePrimitive<B> {
     type Epsilon = f64;
 
     fn default_epsilon() -> f64 {
-        f64::default_epsilon()
+        EP
     }
 
     fn abs_diff_eq(&self, o: &Self, epsilon: f64) -> bool {
@@ -42,7 +42,7 @@ impl<const B: Boundary> AbsDiffEq for CirclePrimitive<B> {
 
 impl<const B: Boundary> RelativeEq for CirclePrimitive<B> {
     fn default_max_relative() -> f64 {
-        f64::default_max_relative()
+        EP
     }
 
     fn relative_eq(&self, o: &Self, epsilon: f64, max_relative: f64) -> bool {
@@ -65,6 +65,11 @@ impl<const B: Boundary> CirclePrimitive<B> {
 
     pub const fn p(&self) -> Pt {
         self.p
+    }
+
+    #[must_use]
+    pub fn rel_eq(&self, o: &Self) -> bool {
+        RelativeEq::relative_eq(self, o, EP, EP)
     }
 
     #[must_use]

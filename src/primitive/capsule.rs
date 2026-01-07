@@ -9,7 +9,7 @@ use crate::geom::intersects::{
     cap_intersects_cap, cap_intersects_circ, cap_intersects_path, cap_intersects_poly,
     cap_intersects_rt, cap_intersects_tri,
 };
-use crate::geom::math::eq;
+use crate::geom::math::{EP, eq};
 use crate::primitive::circle::CirclePrimitive;
 use crate::primitive::point::Pt;
 use crate::primitive::shape::Shape;
@@ -36,7 +36,7 @@ impl<const B: Boundary> AbsDiffEq for CapsulePrimitive<B> {
     type Epsilon = f64;
 
     fn default_epsilon() -> f64 {
-        f64::default_epsilon()
+        EP
     }
 
     fn abs_diff_eq(&self, o: &Self, epsilon: f64) -> bool {
@@ -48,7 +48,7 @@ impl<const B: Boundary> AbsDiffEq for CapsulePrimitive<B> {
 
 impl<const B: Boundary> RelativeEq for CapsulePrimitive<B> {
     fn default_max_relative() -> f64 {
-        f64::default_max_relative()
+        EP
     }
 
     fn relative_eq(&self, o: &Self, epsilon: f64, max_relative: f64) -> bool {
@@ -109,6 +109,11 @@ impl<const B: Boundary> CapsulePrimitive<B> {
 
     pub fn seg(&self) -> Segment {
         seg(self.st, self.en)
+    }
+
+    #[must_use]
+    pub fn rel_eq(&self, o: &Self) -> bool {
+        RelativeEq::relative_eq(self, o, EP, EP)
     }
 
     #[must_use]

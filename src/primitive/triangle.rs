@@ -7,7 +7,7 @@ use crate::geom::bounds::pt_cloud_bounds;
 use crate::geom::contains::{tri_contains_pt, tri_contains_rt};
 use crate::geom::convex::ensure_ccw;
 use crate::geom::intersects::{cap_intersects_tri, circ_intersects_tri, rt_intersects_tri};
-use crate::geom::math::is_collinear;
+use crate::geom::math::{EP, is_collinear};
 use crate::primitive::point::Pt;
 use crate::primitive::shape::Shape;
 use crate::primitive::{Boundary, Rt, Segment, ShapeOps, Tri, TriExcl, seg};
@@ -26,7 +26,7 @@ impl<const B: Boundary> AbsDiffEq for TriPrimitive<B> {
     type Epsilon = f64;
 
     fn default_epsilon() -> f64 {
-        f64::default_epsilon()
+        EP
     }
 
     fn abs_diff_eq(&self, o: &Self, epsilon: f64) -> bool {
@@ -38,7 +38,7 @@ impl<const B: Boundary> AbsDiffEq for TriPrimitive<B> {
 
 impl<const B: Boundary> RelativeEq for TriPrimitive<B> {
     fn default_max_relative() -> f64 {
-        f64::default_max_relative()
+        EP
     }
 
     fn relative_eq(&self, o: &Self, epsilon: f64, max_relative: f64) -> bool {
@@ -91,6 +91,11 @@ impl<const B: Boundary> TriPrimitive<B> {
             Boundary::Include => false, // Degenerate triangle still has its boundary
             Boundary::Exclude => self.is_degenerate(), // Degenerate excluded triangle has no interior
         }
+    }
+
+    #[must_use]
+    pub fn rel_eq(&self, o: &Self) -> bool {
+        RelativeEq::relative_eq(self, o, EP, EP)
     }
 
     fn intersects_shape_impl(&self, s: &Shape) -> bool {
